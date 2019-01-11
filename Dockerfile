@@ -31,36 +31,36 @@ RUN useradd -ms /bin/zsh bronek
 WORKDIR /home/bronek
 
 RUN apt-add-repository -y ppa:ondrej/php && apt-get update && apt-get install -y --force-yes \
-	php7.2-curl \
-	php7.2-gd \
-	php7.2-intl \
-	php7.2-mysql \
-	php7.2-xml \
-	php7.2-mbstring \
-	php7.2-bcmath \
-    php7.2-mongo \
-	php7.2-zip \
-	php7.2-opcache \
-	php7.2-bz2 \
-	php7.2-gmp \
-	php7.2-redis \
-    php7.2-cli \
+	php7.3-curl \
+	php7.3-gd \
+	php7.3-intl \
+	php7.3-mysql \
+	php7.3-xml \
+	php7.3-mbstring \
+	php7.3-bcmath \
+    php7.3-mongo \
+	php7.3-zip \
+	php7.3-opcache \
+	php7.3-bz2 \
+	php7.3-gmp \
+	php7.3-redis \
+    php7.3-cli \
     php-xdebug
 
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
-ADD php-conf.ini /etc/php/7.2/cli/conf.d/29-conf.ini
+ADD php-conf.ini /etc/php/7.3/cli/conf.d/29-conf.ini
 
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
     && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
-    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > /etc/php/7.2/cli/conf.d/blackfire.ini \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > /etc/php/7.3/cli/conf.d/blackfire.ini \
     && curl -o /bin/blackfire https://packages.blackfire.io/binaries/blackfire-agent/1.11.2/blackfire-cli-linux_amd64 \
     && chmod +x /bin/blackfire
 
-RUN rm /etc/php/7.2/cli/conf.d/20-xdebug.ini
+RUN rm /etc/php/7.3/cli/conf.d/20-xdebug.ini
 
 RUN wget https://github.com/sharkdp/bat/releases/download/v0.3.0/bat_0.3.0_amd64.deb \
     && dpkg -i bat_0.3.0_amd64.deb \
